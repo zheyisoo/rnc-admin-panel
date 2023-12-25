@@ -13,8 +13,6 @@ export default authMiddleware({
         const orgSelection = new URL(path,req.url);
         return NextResponse.redirect(orgSelection);
       }
-
-
     }
 });
  

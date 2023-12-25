@@ -5,7 +5,7 @@ import { UserButton } from "@clerk/nextjs";
 
 const ProtectedPage = () => {
     const { userId } = useAuth();
-    const { user } = useUser();
+    const {user} = useUser();
 
   return (
     <div>
