@@ -5,7 +5,6 @@ import { Item } from '@prisma/client';
 import { revalidatePath } from 'next/cache'
 
 const addNewItem = async (item:Item) => {
-    console.log("run here?")
     try {
         const newItem = await db.item.create({
             data: {
@@ -13,6 +12,7 @@ const addNewItem = async (item:Item) => {
                 price: item.price,
                 quantity: item.quantity,
                 category: item.category,
+                imageUrls: item.imageUrls,
             },
         });
         revalidatePath('/dashboard/items')

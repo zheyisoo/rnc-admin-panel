@@ -13,6 +13,8 @@ import {
   } from "@/components/ui/table"
   import { Item } from '@prisma/client';
   import { Transaction } from '@prisma/client';
+  import TransactionsDataTable from './transactionsOrderTable';
+
 
 interface TransactionListProps {
   transactionsList: Transaction[];
@@ -27,7 +29,6 @@ const TransactionList: React.FC<TransactionListProps> = ({ transactionsList }) =
   useEffect(() => {
     const sortedTransactions = transactionsList.slice().sort((a, b) => a.id - b.id);
     setTransactions(sortedTransactions);
-    console.log("itemList", transactions)
   }, [transactionsList]);
 
 //   const handleRowClick = (item: Item) => {
@@ -41,7 +42,7 @@ const TransactionList: React.FC<TransactionListProps> = ({ transactionsList }) =
 
   return (
     <div>
-    <Table>
+    {/* <Table>
         <TableCaption>Transactions List</TableCaption>
         <TableHeader>
         <TableRow>
@@ -63,7 +64,7 @@ const TransactionList: React.FC<TransactionListProps> = ({ transactionsList }) =
             </TableRow>
         ))}
         </TableBody>
-    </Table>
+    </Table> */}
     </div>
   );
 };

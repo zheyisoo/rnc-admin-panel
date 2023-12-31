@@ -1,12 +1,12 @@
-import React, { useEffect } from 'react';
+import React from 'react';
 import { db } from '@/lib/db';
 import { AddNewItem } from './_components/addNewItem';
 import ItemList from './_components/ItemList';
+import ItemDataTable from './_components/itemDataTable';
   
 const ItemsPage = async () => {
 
     const items = await db.item.findMany()
-
 
     return (
     <div className='flex-col'>
@@ -18,7 +18,7 @@ const ItemsPage = async () => {
             </div>
       </div>
       <div className='px-20 py-8'>
-        <ItemList itemList={items}/>
+        <ItemDataTable itemList={items}/>
       </div>
     </div>
     );

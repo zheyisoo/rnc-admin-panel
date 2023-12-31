@@ -17,18 +17,6 @@ import {
     DotsHorizontalIcon,
   } from "@radix-ui/react-icons"
   import {
-    ColumnDef,
-    ColumnFiltersState,
-    SortingState,
-    VisibilityState,
-    flexRender,
-    getCoreRowModel,
-    getFilteredRowModel,
-    getPaginationRowModel,
-    getSortedRowModel,
-    useReactTable,
-  } from "@tanstack/react-table"
-  import {
     Tooltip,
     TooltipContent,
     TooltipProvider,
@@ -48,7 +36,6 @@ const ItemList: React.FC<ItemListProps> = ({ itemList }) => {
 
 
   useEffect(() => {
-    console.log("itemList", itemList)
     const sortedItems = itemList.slice().sort((a, b) => a.id - b.id);
     setItems(sortedItems);
   }, [itemList]);

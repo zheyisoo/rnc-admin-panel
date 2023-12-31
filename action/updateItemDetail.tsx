@@ -1,23 +1,20 @@
 "use server";
 
 import { db } from '@/lib/db';
-import { Clerk } from '@clerk/nextjs/server';
 import { currentUser } from '@clerk/nextjs/server';
 import { Item } from '@prisma/client';
-import { Transaction } from '@prisma/client';
 import { revalidatePath } from 'next/cache'
-import { redirect } from 'next/navigation'
+import { getSelf } from '@/lib/authService';
 
-const updateItemDetail = async (item:Item) => {
+const updateItemDetail = async (item:Item,userId:string) => {
     try {
-        const user = await currentUser();
         const curItem = await db.item.findUnique({
             where: {
                 id: item.id
             }
         })
         let quantityDiff = 0
-        if(curItem?.quantity){
+        if(curItem && curItem.quantity !== null){
             quantityDiff = item.quantity - curItem.quantity
         }
         const newItem = await db.item.update({
@@ -37,7 +34,7 @@ const updateItemDetail = async (item:Item) => {
                 data: {
                     itemId: item.id,
                     quantity: quantityDiff,
-                    updatedBy: user?.username || "unknown",
+                    updatedBy: userId || "unknown",
                     updatedById: 1,
                 },
             });

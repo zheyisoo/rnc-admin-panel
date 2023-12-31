@@ -1,6 +1,6 @@
 "use client"
 
-import { useEffect, useState } from 'react';
+import {useState } from 'react';
 
 import {
     Dialog,
@@ -25,29 +25,62 @@ import { Label } from "@/components/ui/label"
 import addNewItem from '@/action/addNewItem';
 import { Item } from '@prisma/client';
 import { Category } from '@prisma/client';
+import { SingleImageDropzone } from '@/components/singleImageDropZone';
+import { useEdgeStore } from '@/lib/edgestore';
 
 export const AddNewItem = () => {
 
-    const [name, setName] = useState(''); // Use an empty string as a default value
+    //form state
     const [isOpen, setIsOpen] = useState(false);
+    const [name, setName] = useState(''); 
     const [quantity, setQuantity] = useState(0);
     const [price, setPrice] = useState(0);
+    const [image, setImage] = useState<string>('');
     const [category, setCategory] = useState<Category>(Category.FOOD);
 
+    //image upload state
+    const [file, setFile] = useState<File>();
+    const [uploading, setUploading] = useState(false);
+    const [progress, setProgress] = useState(0);
+
+    const { edgestore } = useEdgeStore();
+
     const handleSaveChanges = () => {
-        console.log("run here???")
         const newItem: Item = {
             id: 0,
             name: name,
             price: price,
             quantity: quantity,
-            category: Category.FOOD,
+            category: category,
+            imageUrls: image,
             updatedAt: new Date(),
             createdAt: new Date(),
         };
         addNewItem(newItem)
         setIsOpen(false);
     }
+
+    const handleUpload = async () => {
+        if (file) {
+          try {
+            setUploading(true);
+    
+            const res = await edgestore.publicFiles.upload({
+              file,
+              onProgressChange: (progress) => {
+                setProgress(progress);
+              },
+            });
+            setImage(res.url);
+            console.log(res);
+          } catch (error) {
+            console.error('Error uploading file:', error);
+          } finally {
+            setUploading(false);
+            setProgress(0);
+          }
+        }
+      };
 
     return (
         <div>
@@ -108,6 +141,24 @@ export const AddNewItem = () => {
                 </SelectContent>
                 </Select>
                 </div>
+            </div>
+            <div className='flex items-center justify-center'>
+                <SingleImageDropzone
+                    width={50}
+                    height={50}
+                    value={file}
+                    onChange={(file) => {
+                    setFile(file);
+                    }}
+                />
+            </div>
+            <div className='flex items-center justify-center'>
+            <Button
+                onClick={handleUpload}
+                disabled={uploading}
+            >
+                {uploading ? `Uploading... ${progress}%` : 'Upload'}
+            </Button>
             </div>
             <div className='flex items-center justify-center'>
                 <Button type="submit" onClick={() => handleSaveChanges()}>Save changes</Button>

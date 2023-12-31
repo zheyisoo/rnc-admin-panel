@@ -1,33 +1,37 @@
+"use server"
+
 import React, { useEffect } from 'react';
 import { db } from '@/lib/db';
-import CartItemList from './_components/cartItemList';
+import OrderDataTable from './_components/orderDataTable';
+import {OrderWithFullDetails,OrdersTable} from "@/lib/type"
+
+import {getOrdersWithCartItemsAndItems} from "@/lib/orderService"
   
 const ItemsPage = async () => {
 
-    const items = await db.item.findMany()
-    const orderWithCartItemsAndItems = await db.order.findMany({
-      include: {
-        items: {
-          include: {
-            item: {
-            },
-          },
-        },
-      },
-    });
-
-    console.log("orderWithCartItemsAndItems", orderWithCartItemsAndItems)
+    const orderWithCartItemsAndItemsRaw:OrderWithFullDetails[] = await getOrdersWithCartItemsAndItems()
+    
+    // Map the array of OrderWithFullDetails to an array of ItemsTable
+    const itemsTables: OrdersTable[] = orderWithCartItemsAndItemsRaw.map((order) => {
+      const itemsTable: OrdersTable = {
+        id: order.id,
+        orderedBy: order.user.username,
+        items: order.items,
+        status: order.status
+          };
+          return itemsTable;
+    })
 
     return (
-    <div className='flex-col'>
+      <div className='flex-col'>
         <div className="flex">
-            <div className="flex-grow">
-            </div>
+          <div className="flex-grow">
+          </div>
+        </div>
+        <div className='px-20 py-8'>
+          <OrderDataTable itemList={itemsTables}/>
+        </div>
       </div>
-      <div className='px-20 py-8'>
-        <CartItemList itemList={orderWithCartItemsAndItems}/>
-      </div>
-    </div>
     );
   };
   

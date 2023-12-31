@@ -1,11 +1,27 @@
+"use client"
+
 import { Sidebar } from "./_components/sidebar";
 import { Navbar } from "./_components/navbar";
+import { useAuth,useUser } from "@clerk/nextjs";
+import useUserStore from "@/store/useUserStore";
+import { stat } from "fs";
+import { set } from "zod";
+import { useEffect } from "react";
+import { db } from "@/lib/db";
 
 const DashboardLayout = ({ 
   children
 }: { 
   children: React.ReactNode;
  }) => {
+  const {user} = useUser();
+  const store = useUserStore()
+  useEffect(() => {
+    if (user && user.username){
+      useUserStore.setState({userId:user.username})
+    }
+  }, [user])
+
   return (
     <div>
       <Navbar />
@@ -19,7 +35,6 @@ const DashboardLayout = ({
           </div>
         </div>
       </div>
-      {/* {children} */}
     </div>
   );
  };

@@ -1,14 +1,18 @@
 import React from 'react';
 import { db } from '@/lib/db';
-import TransactionList from './_components/transactionList';
+import TransactionsDataTable from './_components/transactionsOrderTable';
+
 
 const TransactionsPage = async () => {
-  const Transactions = await db.transaction.findMany()
-  console.log("Transactions", Transactions)
+  const Transactions = await db.transaction.findMany({
+    include:{
+      item:true
+    }
+  })
 
   return (
     <div className='px-20 py-8'>
-      <TransactionList transactionsList={Transactions}/>
+      <TransactionsDataTable transactionsList={Transactions}/>
     </div>
   );
 };

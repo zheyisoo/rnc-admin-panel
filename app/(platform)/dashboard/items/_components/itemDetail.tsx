@@ -26,11 +26,10 @@ import { Label } from "@/components/ui/label"
 import updateItemDetail from '@/action/updateItemDetail';
 import { Category } from '@prisma/client';
 import { useQRCode } from 'next-qrcode';
-import { CldImage, CldUploadWidget } from 'next-cloudinary';
-import { CldUploadButton } from 'next-cloudinary';
 import { useEdgeStore } from '@/lib/edgestore';
 import { SingleImageDropzone } from '@/components/singleImageDropZone';
 import { set } from 'zod';
+import useUserStore from '@/store/useUserStore';
 
 
 
@@ -55,13 +54,9 @@ const ItemDetail: React.FC<ItemDetailProps> = ({item}) => {
 
     const { Canvas } = useQRCode();
 
+    const store = useUserStore();
+
     const handleSaveChanges = () => {
-        console.log("run here???")
-        // Access the updated values of name and quantity here
-        console.log('Name:', name);
-        console.log('Quantity:', quantity);
-        console.log('Price:', price);
-        console.log('image:', image)
         const item: Item = {
             id: items?.id || 0,
             name: name,
@@ -72,8 +67,7 @@ const ItemDetail: React.FC<ItemDetailProps> = ({item}) => {
             createdAt: items?.createdAt || new Date(),
             imageUrls: image,
         };
-        updateItemDetail(item);
-        console.log("item", item)
+        updateItemDetail(item,store.userId);
         setIsOpen(false);
       };
 
@@ -110,7 +104,6 @@ const ItemDetail: React.FC<ItemDetailProps> = ({item}) => {
       };
     
     useEffect(() => {
-      console.log("itemList", item)
       setItems(item);
       setIsOpen(true)
       initiateItem()  
