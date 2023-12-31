@@ -107,7 +107,7 @@ const ItemDetail: React.FC<ItemDetailProps> = ({item}) => {
       setItems(item);
       setIsOpen(true)
       initiateItem()  
-    }, [item]);
+    },[item]);
 
 return (
     <div>
@@ -116,7 +116,7 @@ return (
         <DialogHeader>
             <DialogTitle>Edit Item Details</DialogTitle>
             <DialogDescription>
-            Make changes to the item here. Click save when you're done.
+            Make changes to the item here. Click save when you are done.
             </DialogDescription>
         </DialogHeader>
         <div className="grid gap-4 py-4">

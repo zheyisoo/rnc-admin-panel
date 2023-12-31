@@ -10,7 +10,7 @@ import { Separator } from "@/components/ui/separator";
 import { Skeleton } from "@/components/ui/skeleton";
 import { Accordion } from "@/components/ui/accordion";
 
-import { NavItem, Organization } from "./nav-item";
+// import { NavItem, Organization } from "./nav-item";
 
 import { Metadata } from "next"
 import Image from "next/image"
